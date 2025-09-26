@@ -1,0 +1,24 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#0153a2",
+    "activityBar.background": "#0153a2",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#e7e7e7",
+    "activityBarBadge.foreground": "#0153a2",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#0153a2",
+    "statusBar.background": "#01396f",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#0153a2",
+    "statusBarItem.remoteBackground": "#01396f",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#01396f",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#01396f99",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  }
+}

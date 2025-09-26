@@ -1,0 +1,56 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.625rem;
+  --spacing: 0.25rem;
+
+  --background: #f2faff;
+  --foreground: #21221c;
+
+  --brand-primary: #a37d42;
+  --brand-primary-shade: #fffaf6;
+  --brand-secondary: #01396f;
+  --brand-dark-blue: #1a1c2c;
+  --brand-danger: #ab0021;
+  --brand-danger-shade: #fee4e6;
+  --brand-white-shade: #fffefc;
+  --brand-forest-green: #90988d;
+}
+
+@theme {
+  /* fonts */
+  --font-avenir: var(--font-avenir);
+  --font-bookmania: var(--font-bookmania);
+
+  /* breakpoints */
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1375px;
+  --breakpoint-2xl: 1512px;
+  --breakpoint-3xl: 1920px;
+
+  /* radius */
+  --radius-xs: calc(var(--radius) - 6px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--brand-primary);
+  --color-primary-shade: var(--brand-primary-shade);
+  --color-secondary: var(--brand-secondary);
+  --color-dark-blue: var(--brand-dark-blue);
+  --color-danger: var(--brand-danger);
+  --color-danger-shade: var(--brand-danger-shade);
+  --color-white-shade: var(--brand-white-shade);
+  --color-forest-green: var(--brand-forest-green);
+}
+
+.dark {
+}

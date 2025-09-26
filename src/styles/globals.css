@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import './theme.css';
+
+@layer base {
+  * {
+    @apply border-forest-green;
+  }
+  body {
+    @apply bg-background text-foreground font-avenir;
+  }
+}
+
+/* scrollbar styling starts */
+
+*::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+*::-webkit-scrollbar-track {
+  @apply bg-primary/15;
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-primary/65 active:bg-primary/80;
+}
+
+*::-webkit-scrollbar-corner {
+  @apply bg-primary/15;
+}
+
+/* Standardized Properties */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-width: 11px;
+    scrollbar-color: theme('colors.primary.DEFAULT/0.65') theme('colors.primary.DEFAULT/0.15');
+  }
+}
+
+/* scrollbar styling ends */
+
+*::selection {
+  @apply bg-primary/70 text-white;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
