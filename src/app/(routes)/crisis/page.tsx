@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import EmailSignupForm from '@/components/ui/email-signup-form';
 import SupportPage from '@/components/pages/support';
 import React from 'react';
 
@@ -236,22 +236,13 @@ export default async function Home() {
               </div>
             </h2>
 
-            <form className="space-y-2">
-              <Input
-                label="Enter Email"
-                hideLabel
-                type="email"
-                placeholder="Enter email address"
-                parentClassName="bg-transparent"
-                rightElement={<Button size={'sm'}> Sign up now</Button>}
-              />
-              <p className="text-center font-bookmania text-foreground/60 text-sm lg:text-xl leading-[140%]">
-                Questions? Contact us at{' '}
-                <span className="underline hover:text-primary cursor-pointer">support@willow-path.com</span>
-                <br />
-                By providing your email you are consenting to WilloPath’s terms and privacy policy
-              </p>
-            </form>
+            <EmailSignupForm parentClassName="bg-transparent" buttonSize="sm" />
+            <p className="text-center font-bookmania text-foreground/60 text-sm lg:text-xl leading-[140%]">
+              Questions? Contact us at{' '}
+              <span className="underline hover:text-primary cursor-pointer">support@willow-path.com</span>
+              <br />
+              By providing your email you are consenting to WilloPath’s terms and privacy policy
+            </p>
           </div>
         </div>
       </section>

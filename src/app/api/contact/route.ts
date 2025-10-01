@@ -1,32 +1,70 @@
 import { NextResponse } from 'next/server';
-import { base } from '@/lib/airtable';
+
+const FORM_URL = (portalId: string, formId: string) =>
+  `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formId}`;
 
 export const POST = async (request: Request) => {
   const { name, email, topics, otherTopic } = await request.json();
 
-  const selected = Array.isArray(topics) ? [...topics] : [];
+  const selected: string[] = Array.isArray(topics) ? [...topics] : [];
   const other = (otherTopic ?? '').trim();
 
-  // Add "Other" if user typed something but didn't check it
   if (other && !selected.includes('Other')) selected.push('Other');
-
-  // Validation: if "Other" is selected but no text
   if (selected.includes('Other') && !other) {
-    return NextResponse.json({ error: 'Please specify a topic when selecting ‘Other’.' }, { status: 400 });
+    return NextResponse.json(
+      { error: "Please specify a topic when selecting 'Other'." },
+      { status: 400 }
+    );
   }
 
-  const record = {
-    Name: name,
-    Email: email,
-    Topics: selected,
-    'Other_Topic': other || null
+  const fields = [
+    { name: 'email', value: email },
+    { name: 'firstname', value: name },
+    { name: 'discussed_topics', value: selected.join(';') },
+    { name: 'other_topic', value: other || '' },
+  ];
+
+  // Add context for better tracking in HubSpot
+  const payload = {
+    fields,
+    context: {
+      pageUri: request.headers.get('referer') || 'https://yoursite.com',
+      pageName: 'Contact Form'
+    }
   };
 
   try {
-    const created = await base('Booking Table').create(record);
-    return NextResponse.json({ id: created.id });
+    const res = await fetch(
+      FORM_URL(
+        process.env.HUBSPOT_PORTAL_ID!,
+        process.env.HUBSPOT_FORM_ID!
+      ),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error('HubSpot form error:', errText);
+      return NextResponse.json(
+        { error: 'Failed to submit to HubSpot', details: errText }, 
+        { status: res.status }
+      );
+    }
+
+    const data = await res.json();
+    return NextResponse.json({ ok: true, data });
   } catch (error) {
-    console.error('Airtable error:', error);
-    return NextResponse.json({ error: 'Failed to create record in Airtable' }, { status: 500 });
+    console.error('HubSpot form exception:', error);
+    return NextResponse.json(
+      { error: 'Failed to submit to HubSpot' }, 
+      { status: 500 }
+    );
   }
 };

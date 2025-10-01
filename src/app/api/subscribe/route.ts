@@ -1,44 +1,62 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) {
-  try {
-    const { email } = await request.json();
+const FORM_URL = (portalId: string, formId: string) =>
+  `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formId}`;
 
-    if (!email) {
-      return NextResponse.json({ error: 'Email is required' }, { status: 400 });
-    }
+export const POST = async (request: Request) => {
+  const { email } = await request.json();
 
-    const MailchimpKey = process.env.MAILCHIMP_API_KEY;
-    const MailchimpServer = process.env.MAILCHIMP_API_SERVER;
-    const MailchimpAudience = process.env.MAILCHIMP_LIST_ID;
-
-    if (!MailchimpKey || !MailchimpServer || !MailchimpAudience) {
-      throw new Error('Missing Mailchimp environment variables');
-    }
-
-    const customUrl = `https://${MailchimpServer}.api.mailchimp.com/3.0/lists/${MailchimpAudience}/members`;
-
-    const response = await fetch(customUrl, {
-      method: 'POST',
-      headers: {
-        Authorization: `Basic ${Buffer.from(`anystring:${MailchimpKey}`).toString('base64')}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email_address: email,
-        status: 'subscribed'
-      })
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      return NextResponse.json({ error: errorData.detail }, { status: response.status });
-    }
-
-    const received = await response.json();
-    return NextResponse.json(received);
-  } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  if (!email) {
+    return NextResponse.json(
+      { error: 'Email is required' },
+      { status: 400 }
+    );
   }
-}
+
+  const fields = [
+    { name: 'email', value: email },
+  ];
+
+  const payload = {
+    fields,
+    context: {
+      pageUri: request.headers.get('referer') || 'https://yoursite.com',
+      pageName: 'Newsletter Form'
+    }
+  };
+
+  try {
+    const res = await fetch(
+      FORM_URL(
+        process.env.HUBSPOT_PORTAL_ID!,
+        process.env.HUBSPOT_FORM_ID_NEWSLETTER! // Your new form ID
+      ),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.HUBSPOT_ACCESS_TOKEN}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error('HubSpot form error:', errText);
+      return NextResponse.json(
+        { error: 'Failed to submit to HubSpot', details: errText }, 
+        { status: res.status }
+      );
+    }
+
+    const data = await res.json();
+    return NextResponse.json({ ok: true, data });
+  } catch (error) {
+    console.error('HubSpot form exception:', error);
+    return NextResponse.json(
+      { error: 'Failed to submit to HubSpot' }, 
+      { status: 500 }
+    );
+  }
+};
