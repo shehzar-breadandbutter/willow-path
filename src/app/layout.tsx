@@ -1,6 +1,7 @@
 import '@/styles/globals.css';
 import { avenir, bookmania } from '@/styles/font';
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'Willow Path',
@@ -64,7 +65,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${avenir.variable} ${bookmania.variable} antialiased`}>{children}</body>
+      <body className={`${avenir.variable} ${bookmania.variable} antialiased`}>
+        {/* Google Analytics Tag */}
+        <Script
+            id="gtag-src"
+            src="https://www.googletagmanager.com/gtag/js?id=AW-17532252844"
+            strategy="afterInteractive"
+          />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17532252844');
+          `}
+        </Script>
+        {children}
+      </body>
     </html>
   );
 }
