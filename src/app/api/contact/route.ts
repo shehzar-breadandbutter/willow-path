@@ -4,7 +4,7 @@ const FORM_URL = (portalId: string, formId: string) =>
   `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formId}`;
 
 export const POST = async (request: Request) => {
-  const { name, email, topics, otherTopic } = await request.json();
+  const { name, email, topics, otherTopic, hutk, pageUri, pageName } = await request.json();
 
   const selected: string[] = Array.isArray(topics) ? [...topics] : [];
   const other = (otherTopic ?? '').trim();
@@ -28,8 +28,9 @@ export const POST = async (request: Request) => {
   const payload = {
     fields,
     context: {
-      pageUri: request.headers.get('referer') || 'https://yoursite.com',
-      pageName: 'Contact Form'
+      pageUri,
+      pageName,
+      hutk: hutk
     }
   };
 

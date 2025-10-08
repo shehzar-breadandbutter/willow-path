@@ -4,7 +4,7 @@ const FORM_URL = (portalId: string, formId: string) =>
   `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formId}`;
 
 export const POST = async (request: Request) => {
-  const { email } = await request.json();
+  const { email, hutk, pageUri, pageName } = await request.json();
 
   if (!email) {
     return NextResponse.json(
@@ -20,8 +20,9 @@ export const POST = async (request: Request) => {
   const payload = {
     fields,
     context: {
-      pageUri: request.headers.get('referer') || 'https://yoursite.com',
-      pageName: 'Newsletter Form'
+      pageUri,
+      pageName,
+      hutk: hutk
     }
   };
 

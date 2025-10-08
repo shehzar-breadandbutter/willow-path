@@ -32,10 +32,14 @@ const EmailSignupForm: React.FC<EmailSignupFormProps> = ({ parentClassName, butt
 
     setIsLoading(true);
     try {
+      const hutk = typeof document !== 'undefined' ? document.cookie.split('; ').find(c => c.startsWith('hubspotutk='))?.split('=')[1] : undefined;
+      const pageUri = window.location.href;
+      const pageName = document.title;
+
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: trimmed })
+        body: JSON.stringify({ email: trimmed, hutk, pageUri, pageName })
       });
 
       if (!res.ok) {

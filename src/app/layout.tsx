@@ -80,6 +80,11 @@ export default function RootLayout({
             gtag('config', 'AW-17532252844');
           `}
         </Script>
+        <Script
+          id="hs-tracking"
+          strategy="afterInteractive"
+          src={`https://js.hs-scripts.com/${process.env.HUBSPOT_PORTAL_ID}.js`}
+        />
         {children}
       </body>
     </html>

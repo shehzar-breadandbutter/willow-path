@@ -65,12 +65,23 @@ const BookingModal = (props: BookingModal) => {
     setError(null);
 
     try {
+      const hutk = typeof document !== 'undefined' ? document.cookie.split('; ').find(c => c.startsWith('hubspotutk='))?.split('=')[1] : undefined;
+      const pageUri = window.location.href;
+      const pageName = document.title;
+
+      const payload = {
+        ...data,    
+        hutk,
+        pageUri,
+        pageName
+      };
+
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(payload)
       });
 
       if (!response.ok) {
