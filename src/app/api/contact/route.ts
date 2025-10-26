@@ -24,7 +24,6 @@ export const POST = async (request: Request) => {
     { name: 'other_topic', value: other || '' },
   ];
 
-  // Add context for better tracking in HubSpot
   const payload = {
     fields,
     context: {

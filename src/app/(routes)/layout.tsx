@@ -49,12 +49,12 @@ export default function Layout({
               <p className="text-sm font-semibold text-white">Quick Links</p>
               <ul className="mt-3 space-y-2 text-sm">
                 <li>
-                  <Link className="hover:text-white" href="#">
+                  <Link className="hover:text-white" href="/terms-and-privacy">
                     Privacy Policy
                   </Link>
                 </li>
                 <li>
-                  <Link className="hover:text-white" href="#">
+                  <Link className="hover:text-white" href="/terms-and-privacy">
                     Terms of Service
                   </Link>
                 </li>
